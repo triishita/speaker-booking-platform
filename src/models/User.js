@@ -1,26 +1,37 @@
-const mysql = require('mysql2');
-const dotenv = require('dotenv');
+// src/models/User.js
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-dotenv.config();
-
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
-});
-
-const User = {
-  create: (userData, callback) => {
-    const { firstName, lastName, email, password } = userData;
-    const query = `INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)`;
-    db.query(query, [firstName, lastName, email, password], callback);
+const User = sequelize.define('User', {
+  firstName: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
-
-  findByEmail: (email, callback) => {
-    const query = `SELECT * FROM users WHERE email = ?`;
-    db.query(query, [email], callback);
-  }
-};
+  lastName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  otp: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  isVerified: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
+  type: {
+    type: DataTypes.ENUM('user', 'speaker'),
+    defaultValue: 'user',
+  },
+});
 
 module.exports = User;
