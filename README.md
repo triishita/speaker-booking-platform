@@ -9,7 +9,7 @@ The goal of this project is to develop a platform where users can book speaker s
 ## Technology Stack
 
 - **Backend**: Node.js, Express.js
-- **Database**: SQL (MySQL)
+- **Database**: SQL (PostgreSQL)
 - **Authentication**: JWT (JSON Web Token) for user and speaker authentication
 - **Email**: Nodemailer for sending email notifications
 - **Google Calendar Integration**: Google APIs
