@@ -1,24 +1,25 @@
 const express = require('express');
-const dotenv = require('dotenv');
-const bodyParser = require('body-parser');
+const sequelize = require('./config/database'); // Only declare once
 const userRoutes = require('./routes/userRoutes');
 const speakerRoutes = require('./routes/speakerRoutes');
-const sequelize = require('./config/database');
-
-dotenv.config(); // Load environment variables
 
 const app = express();
 
-// Middleware
-app.use(bodyParser.json()); // Parse JSON data
-
-// Routes
+app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/speakers', speakerRoutes);
 
-const port = process.env.PORT || 3000;
+// Test DB connection
+sequelize
+  .authenticate()
+  .then(() => console.log('Database connection established successfully.'))
+  .catch((err) => console.error('Unable to connect to the database:', err));
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-  sequelize.sync(); // Sync models with DB
+// Sync models
+sequelize.sync({ force: false }).then(() => {
+  console.log('Database synced.');
 });
+
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
