@@ -1,4 +1,3 @@
-// src/routes/speakerRoutes.js
 const express = require('express');
 const Speaker = require('../models/Speaker');
 const User = require('../models/User');
